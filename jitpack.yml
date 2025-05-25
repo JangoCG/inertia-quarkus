@@ -3,5 +3,6 @@ jdk:
 before_install:
   - export JAVA_HOME=$JAVA_17_HOME
   - java -version
+  - mvn --version
 install:
   - mvn clean install -DskipTests -q
