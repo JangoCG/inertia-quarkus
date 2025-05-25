@@ -354,19 +354,6 @@ The `integration-tests` module contains a complete example with:
 - Template configuration
 - Frontend integration
 
-## Comparison with Go Adapter
-
-This extension implements the same functionality as the [Go Inertia Adapter](https://github.com/inertiajs/inertia-go):
-
-| Feature          | Go Adapter | Quarkus Extension |
-| ---------------- | ---------- | ----------------- |
-| Page Rendering   | ✅         | ✅                |
-| Asset Versioning | ✅         | ✅                |
-| Partial Reloads  | ✅         | ✅                |
-| Shared Props     | ✅         | ✅                |
-| SSR Support      | ✅         | ✅                |
-| Middleware       | ✅         | ✅ (Filter)       |
-
 ## Development Guide
 
 ### For Developers New to Quarkus Extensions
@@ -506,7 +493,7 @@ curl http://localhost:8080/q/arc/beans | grep -i inertia
 **Problem**: "Error rendering template: null"
 **Solution**: Template file is missing or in wrong directory
 
-**Problem**: "404 - Resource Not Found"  
+**Problem**: "404 - Resource Not Found"
 **Solution**: Restart Quarkus dev mode:
 
 ```bash
@@ -548,3 +535,4 @@ mvn clean package -Pnative
 ## License
 
 MIT License
+````
