@@ -1,5 +1,8 @@
 # Inertia.js Quarkus Integration Tests
 
+mvn quarkus:dev
+
+
 This demonstrates the Inertia.js Quarkus Extension with React, following a simple approach similar to Laravel.
 
 ## Quick Start

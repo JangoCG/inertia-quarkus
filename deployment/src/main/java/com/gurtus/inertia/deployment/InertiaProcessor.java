@@ -1,5 +1,6 @@
 package com.gurtus.inertia.deployment;
 
+import com.gurtus.inertia.runtime.InertiaConfig;
 import com.gurtus.inertia.runtime.InertiaContext;
 import com.gurtus.inertia.runtime.InertiaFilter;
 import com.gurtus.inertia.runtime.InertiaService;
@@ -24,7 +25,7 @@ public class InertiaProcessor {
     @BuildStep
     AdditionalBeanBuildItem registerBeans() {
         return AdditionalBeanBuildItem.builder()
-                .addBeanClasses(InertiaService.class, InertiaFilter.class, InertiaContext.class)
+                .addBeanClasses(InertiaService.class, InertiaFilter.class, InertiaContext.class, InertiaConfig.class)
                 .build();
     }
 

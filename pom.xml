@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gurtus</groupId>
     <artifactId>inertia-quarkus-parent</artifactId>
-    <version>0.1.4</version>
+    <version>0.2.0</version>
     <packaging>pom</packaging>
     <name>Inertia.js - Parent</name>
     <description>Quarkus extension for Inertia.js - enables server-side routing with client-side rendering using React, Vue, or Svelte</description>
