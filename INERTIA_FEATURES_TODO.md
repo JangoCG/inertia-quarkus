@@ -16,7 +16,7 @@ Basierend auf dem Rails Inertia Adapter (`inertia-rails`) - alle Features die no
 
 - [x] **Prop Types System** - Verschiedene Prop-Typen für erweiterte Funktionalität
 - [x] **Partial Reloads** - Unterstützung für partial reloads mit Header-Parsing
-- [ ] **Enhanced Middleware** - Erweiterte Middleware-Features für besseres HTTP-Handling
+- [x] **Enhanced Middleware** - Erweiterte Middleware-Features für besseres HTTP-Handling
 
 ### ❌ Noch zu implementieren
 
@@ -57,18 +57,18 @@ Basierend auf dem Rails Inertia Adapter (`inertia-rails`) - alle Features die no
 
 ## 5. 🌐 Enhanced Middleware
 
-- [ ] Automatische 303 Redirects für PUT/PATCH/DELETE requests
-- [ ] Bessere Asset-Versionierung mit Type-Coercion (Numeric vs String)
-- [ ] XSRF zu CSRF Token Kopierung
-- [ ] Flash message preservation bei 409 Conflicts
-- [ ] Bessere redirect status handling
+- [x] Automatische 303 Redirects für PUT/PATCH/DELETE requests
+- [x] Bessere Asset-Versionierung mit Type-Coercion (Numeric vs String)
+- [x] XSRF zu CSRF Token Kopierung
+- [x] Flash message preservation bei 409 Conflicts
+- [x] Bessere redirect status handling
 
 ## 6. 💾 Session Management
 
-- [ ] `inertia_errors` Session handling
-- [ ] `inertia_clear_history` Session handling
-- [ ] Session cleanup bei non-redirect responses
-- [ ] Error propagation über redirects
+- [x] `inertia_errors` Session handling
+- [x] `inertia_clear_history` Session handling
+- [x] Session cleanup bei non-redirect responses
+- [x] Error propagation über redirects
 
 ## 7. 🖥️ SSR Enhancements
 
@@ -136,17 +136,19 @@ Basierend auf dem Rails Inertia Adapter (`inertia-rails`) - alle Features die no
 2. OptionalProp, AlwaysProp, IgnoreOnFirstLoadProp
 3. Basic partial reload support
 
-### Phase 2: Advanced Props & Merging
+### Phase 2: Enhanced Middleware & Session (✅ COMPLETE)
 
-1. DeferProp mit Gruppierung
-2. MergeProp mit deep merge support
-3. Enhanced Page Object
+1. ✅ Enhanced middleware features
+2. ✅ Session management
+3. ✅ Better redirect handling
+4. ✅ XSRF/CSRF token handling
+5. ✅ Asset versioning with type coercion
 
-### Phase 3: Middleware & Session
+### Phase 3: Controller Integration
 
-1. Enhanced middleware features
-2. Session management
-3. Better redirect handling
+1. Shared data mit filters
+2. Controller-specific configuration
+3. Instance props support
 
 ### Phase 4: Controller Integration
 
@@ -162,7 +164,7 @@ Basierend auf dem Rails Inertia Adapter (`inertia-rails`) - alle Features die no
 
 ---
 
-**Status**: 🟢 Phase 1 Complete - Advanced Prop System & Partial Reloads implemented!
-**CDI Issue**: ✅ Resolved - InertiaRenderer now properly registered as CDI bean
-**Server Status**: ✅ Running - All Phase 1 features working correctly
+**Status**: 🟢 Phase 2 Complete - Enhanced Middleware & Session Management implemented!
+**CDI Issue**: ✅ Resolved - All beans properly registered
+**Server Status**: ✅ Running - All Phase 1 & 2 features working correctly
 **Last Updated**: 2025-01-25

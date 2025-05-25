@@ -34,6 +34,9 @@ public class InertiaRenderer {
     @Inject
     Engine quteEngine;
 
+    @Inject
+    InertiaSession inertiaSession;
+
     /**
      * Render an Inertia response with advanced prop handling.
      */
@@ -180,11 +183,20 @@ public class InertiaRenderer {
     private InertiaPage createPage(String component, Map<String, Object> processedProps, Map<String, Object> allProps) {
         InertiaPage page = new InertiaPage();
         page.setComponent(component);
-        page.setProps(processedProps);
+        
+        // Add session errors to props if they exist
+        Map<String, Object> finalProps = new HashMap<>(processedProps);
+        addSessionDataToProps(finalProps);
+        
+        page.setProps(finalProps);
         page.setUrl(context.getRequestUri());
         page.setVersion(config.version().orElse("1"));
         page.setEncryptHistory(config.encryptHistory() ? true : null);
-        page.setClearHistory(config.clearHistory() ? true : null);
+        
+        // Check for session-based clear history (if session is available)
+        boolean sessionClearHistory = false;
+        // TODO: Get session from request context when available
+        page.setClearHistory((config.clearHistory() || sessionClearHistory) ? true : null);
 
         // Add deferred props info
         if (!context.isPartialReload()) {
@@ -207,6 +219,14 @@ public class InertiaRenderer {
         }
 
         return page;
+    }
+
+    private void addSessionDataToProps(Map<String, Object> props) {
+        // TODO: Add session errors to props when session is available
+        // Map<String, Object> errors = inertiaSession.getAndClearErrors(session);
+        // if (errors != null) {
+        //     props.put("errors", errors);
+        // }
     }
 
     private Map<String, List<String>> collectDeferredProps(Map<String, Object> props) {
