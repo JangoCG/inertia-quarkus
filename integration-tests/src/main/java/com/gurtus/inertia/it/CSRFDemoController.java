@@ -10,7 +10,6 @@ import java.util.Map;
 import com.gurtus.inertia.runtime.InertiaController;
 
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -27,22 +26,25 @@ public class CSRFDemoController extends InertiaController {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response form() {
-        return inertia("CSRFDemo", props(
-            "title", "CSRF Protection Demo with Inertia.js + Axios",
-            "description", "This demonstrates automatic CSRF protection using XSRF-TOKEN cookies and Axios",
-            "messages", new ArrayList<>(messages),
-            "timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))
-        ));
+        Map<String, Object> props = new HashMap<>();
+        props.put("title", "CSRF Protection Demo with Inertia.js + Axios");
+        props.put("description", "This demonstrates automatic CSRF protection using XSRF-TOKEN cookies and Axios");
+        props.put("messages", new ArrayList<>(messages));
+        props.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
+        
+        return inertia("CSRFDemo", props);
     }
 
     @POST
     @Path("/submit")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_HTML)
-    public Response submitForm(
-            @FormParam("name") String name,
-            @FormParam("email") String email,
-            @FormParam("message") String message) {
+    public Response submitForm(String jsonData) {
+        
+        // Simple JSON parsing for demo purposes
+        String name = extractJsonValue(jsonData, "name");
+        String email = extractJsonValue(jsonData, "email");
+        String message = extractJsonValue(jsonData, "message");
         
         // Validate input
         Map<String, String> errors = new HashMap<>();
@@ -58,18 +60,20 @@ public class CSRFDemoController extends InertiaController {
 
         if (!errors.isEmpty()) {
             // Return with validation errors
-            return inertia("CSRFDemo", props(
-                "title", "CSRF Protection Demo with Inertia.js + Axios",
-                "description", "This demonstrates automatic CSRF protection using XSRF-TOKEN cookies and Axios",
-                "messages", new ArrayList<>(messages),
-                "timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")),
-                "errors", errors,
-                "old", props(
-                    "name", name,
-                    "email", email,
-                    "message", message
-                )
-            ));
+            Map<String, Object> props = new HashMap<>();
+            props.put("title", "CSRF Protection Demo with Inertia.js + Axios");
+            props.put("description", "This demonstrates automatic CSRF protection using XSRF-TOKEN cookies and Axios");
+            props.put("messages", new ArrayList<>(messages));
+            props.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
+            props.put("errors", errors);
+            
+            Map<String, Object> old = new HashMap<>();
+            old.put("name", name);
+            old.put("email", email);
+            old.put("message", message);
+            props.put("old", old);
+            
+            return inertia("CSRFDemo", props);
         }
 
         // Add message to our in-memory storage
@@ -88,13 +92,14 @@ public class CSRFDemoController extends InertiaController {
         }
 
         // Redirect back to form with success message
-        return inertia("CSRFDemo", props(
-            "title", "CSRF Protection Demo with Inertia.js + Axios",
-            "description", "This demonstrates automatic CSRF protection using XSRF-TOKEN cookies and Axios",
-            "messages", new ArrayList<>(messages),
-            "timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")),
-            "success", "Message submitted successfully! CSRF protection worked automatically via Axios."
-        ));
+        Map<String, Object> props = new HashMap<>();
+        props.put("title", "CSRF Protection Demo with Inertia.js + Axios");
+        props.put("description", "This demonstrates automatic CSRF protection using XSRF-TOKEN cookies and Axios");
+        props.put("messages", new ArrayList<>(messages));
+        props.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
+        props.put("success", "Message submitted successfully! CSRF protection worked automatically via Axios.");
+        
+        return inertia("CSRFDemo", props);
     }
 
     @GET
@@ -105,24 +110,22 @@ public class CSRFDemoController extends InertiaController {
             messages.clear();
         }
         
-        return inertia("CSRFDemo", props(
-            "title", "CSRF Protection Demo with Inertia.js + Axios",
-            "description", "This demonstrates automatic CSRF protection using XSRF-TOKEN cookies and Axios",
-            "messages", new ArrayList<>(messages),
-            "timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")),
-            "success", "All messages cleared!"
-        ));
+        Map<String, Object> props = new HashMap<>();
+        props.put("title", "CSRF Protection Demo with Inertia.js + Axios");
+        props.put("description", "This demonstrates automatic CSRF protection using XSRF-TOKEN cookies and Axios");
+        props.put("messages", new ArrayList<>(messages));
+        props.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
+        props.put("success", "All messages cleared!");
+        
+        return inertia("CSRFDemo", props);
     }
 
-    @Override
-    protected String getCurrentAction() {
-        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-        for (StackTraceElement element : stack) {
-            if (element.getClassName().equals(this.getClass().getName()) && 
-                !element.getMethodName().equals("getCurrentAction")) {
-                return element.getMethodName();
-            }
-        }
-        return "form";
+    private String extractJsonValue(String json, String key) {
+        // Simple JSON value extraction for demo purposes
+        String pattern = "\"" + key + "\"\\s*:\\s*\"([^\"]+)\"";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(pattern);
+        java.util.regex.Matcher m = p.matcher(json);
+        return m.find() ? m.group(1) : null;
     }
+
 } 
