@@ -1,7 +1,5 @@
 # Inertia.js Quarkus Integration Tests
-
-mvn quarkus:dev
-
+`mvn quarkus:dev`
 
 This demonstrates the Inertia.js Quarkus Extension with React, following a simple approach similar to Laravel.
 
@@ -12,11 +10,11 @@ This demonstrates the Inertia.js Quarkus Extension with React, following a simpl
 Start both servers in separate terminals:
 
 ```bash
-# Terminal 1: Start Vite
+# Terminal 1: Start Vite (from project root)
 npm install
 npm run dev
 
-# Terminal 2: Start Quarkus
+# Terminal 2: Start Quarkus (from project root)
 mvn quarkus:dev
 ```
 
@@ -41,14 +39,22 @@ The template automatically detects the environment and loads assets accordingly.
 ## Project Structure
 
 ```
-src/main/
-├── frontend/           # React app
+integration-tests/
+├── package.json        # Node.js dependencies
+├── vite.config.js     # Vite configuration
+├── frontend/          # React frontend source code
 │   ├── main.jsx
 │   ├── style.css
 │   └── Pages/         # Inertia pages
-└── resources/
-    └── templates/
-        └── inertia.html
+│       ├── Home.jsx
+│       ├── About.jsx
+│       └── Users.jsx
+├── src/main/
+│   ├── java/          # Java backend code
+│   └── resources/
+│       └── templates/
+│           └── inertia.html
+└── pom.xml           # Maven configuration
 ```
 
 That's it! No complex scripts or configurations needed. Just like Laravel or Rails.

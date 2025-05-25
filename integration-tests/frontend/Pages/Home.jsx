@@ -6,7 +6,7 @@ export default function Home({ message, timestamp }) {
   return (
     <Layout title="Home">
       <div className="hero">
-        <h1>🎉 Willkommen bei Inertia.js + Quarkus + React! Works</h1>
+        <h1>🎉 Willkommen bei Inertia.js + Quarkus + React! Works111</h1>
         <p className="lead">{message}</p>
         <p className="timestamp">Generiert um: {timestamp}</p>
       </div>
