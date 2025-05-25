@@ -32,6 +32,12 @@ public class InertiaResource {
     }
 
     @GET
+    @Path("/inertia")
+    public String testEndpoint() {
+        return "Hello inertia";
+    }
+
+    @GET
     @Path("/about")
     public Response about() {
         var features = List.of(
