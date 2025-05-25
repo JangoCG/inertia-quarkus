@@ -37,6 +37,12 @@ public class InertiaRenderer {
     @Inject
     InertiaSession inertiaSession;
 
+    @Inject
+    InertiaSSRService ssrService;
+
+    @Inject
+    InertiaHelper inertiaHelper;
+
     /**
      * Render an Inertia response with advanced prop handling.
      */
@@ -290,6 +296,36 @@ public class InertiaRenderer {
     }
 
     private Response createHtmlResponse(InertiaPage page) {
+        // Set the rendering flag
+        inertiaHelper.setInertiaRendering(true);
+        
+        try {
+            // Try SSR first if enabled
+            if (config.ssrEnabled()) {
+                try {
+                    InertiaSSRService.SSRResponse ssrResponse = ssrService.renderPage(page);
+                    if (ssrResponse.isSuccess()) {
+                        // Set SSR head content for template access
+                        inertiaHelper.setInertiaSSRHead(ssrResponse.getHead());
+                        
+                        // Return SSR-rendered HTML
+                        return createSSRHtmlResponse(page, ssrResponse);
+                    }
+                    // SSR failed, fall back to client-side rendering
+                } catch (Exception e) {
+                    // SSR failed, fall back to client-side rendering
+                }
+            }
+            
+            // Fallback to client-side rendering
+            return createClientSideHtmlResponse(page);
+        } finally {
+            // Reset the rendering flag
+            inertiaHelper.setInertiaRendering(false);
+        }
+    }
+
+    private Response createSSRHtmlResponse(InertiaPage page, InertiaSSRService.SSRResponse ssrResponse) {
         try {
             String pageJson = objectMapper.writeValueAsString(page);
             
@@ -309,6 +345,42 @@ public class InertiaRenderer {
             String html = template.data("page", page)
                                 .data("pageJson", pageJson)
                                 .data("isDevelopment", isDevelopment)
+                                .data("ssrBody", ssrResponse.getBody())
+                                .data("ssrHead", ssrResponse.getHead())
+                                .data("inertiaHelper", inertiaHelper)
+                                .render();
+            
+            return Response.ok(html)
+                    .header("Content-Type", "text/html")
+                    .build();
+        } catch (Exception e) {
+            return Response.serverError()
+                    .entity("Error rendering SSR Inertia template: " + e.getMessage())
+                    .build();
+        }
+    }
+
+    private Response createClientSideHtmlResponse(InertiaPage page) {
+        try {
+            String pageJson = objectMapper.writeValueAsString(page);
+            
+            // Load the configured template
+            String templateName = config.rootTemplate();
+            var template = quteEngine.getTemplate(templateName);
+            
+            if (template == null) {
+                return Response.serverError()
+                    .entity("Inertia template '" + templateName + "' not found. Please create the template file.")
+                    .build();
+            }
+            
+            // Check if we're in development mode
+            boolean isDevelopment = LaunchMode.current() == LaunchMode.DEVELOPMENT;
+            
+            String html = template.data("page", page)
+                                .data("pageJson", pageJson)
+                                .data("isDevelopment", isDevelopment)
+                                .data("inertiaHelper", inertiaHelper)
                                 .render();
             
             return Response.ok(html)

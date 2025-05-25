@@ -70,4 +70,17 @@ public interface InertiaConfig {
      */
     @WithDefault("false")
     boolean clearHistory();
+    
+    /**
+     * Whether to use default render behavior.
+     */
+    @WithDefault("false")
+    boolean defaultRender();
+    
+    /**
+     * Component path resolver pattern.
+     * Use {path} and {action} placeholders.
+     */
+    @WithDefault("{path}/{action}")
+    String componentPathPattern();
 } 

@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.gurtus.inertia.runtime.InertiaController;
+import com.gurtus.inertia.runtime.InertiaHelper;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -17,26 +19,13 @@ import jakarta.ws.rs.core.Response;
 @Path("/")
 public class ExampleController extends InertiaController {
 
+    @Inject
+    InertiaHelper inertiaHelper;
+
     @PostConstruct
     public void init() {
-        // Share data globally
-        share("appName", "Inertia.js + Quarkus");
-        
-        // Share data only for specific actions
+        // Share data only for specific actions (controller-specific)
         shareOnly(props("adminData", "Secret admin info"), "admin", "dashboard");
-        
-        // Share conditional data
-        shareDataIf(props("debugMode", true), () -> true); // Always true for demo
-        
-        // Share dynamic data
-        shareData(() -> props("serverTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))));
-        
-        // Share contextual data (with controller context)
-        shareData(controller -> {
-            Map<String, Object> data = new HashMap<>();
-            data.put("controllerClass", controller.getClass().getSimpleName());
-            return data;
-        });
     }
 
     @GET
@@ -51,7 +40,10 @@ public class ExampleController extends InertiaController {
                 "✅ Enhanced Middleware & Session Management",
                 "✅ Controller Integration with Shared Data Filters",
                 "✅ Action-based Conditional Sharing",
-                "✅ Dynamic and Contextual Data Sharing"
+                "✅ Dynamic and Contextual Data Sharing",
+                "✅ SSR Support with Head Injection",
+                "✅ Helper Functions (inertia_ssr_head, inertia_rendering)",
+                "✅ Enhanced Configuration with Environment Variables"
             }
         ));
     }
@@ -87,6 +79,28 @@ public class ExampleController extends InertiaController {
         return inertia("Public", props(
             "message", "Public Page - This should NOT include adminData",
             "info", "This page demonstrates action-based filtering"
+        ));
+    }
+
+    @GET
+    @Path("/ssr-demo")
+    @Produces(MediaType.TEXT_HTML)
+    public Response ssrDemo() {
+        return inertia("SSRDemo", props(
+            "message", "SSR Demo Page",
+            "timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")),
+            "helperInfo", props(
+                "isInertiaRequest", inertiaHelper.isInertiaRequest(),
+                "isPartialReload", inertiaHelper.isPartialReload(),
+                "isInertiaRendering", inertiaHelper.isInertiaRendering(),
+                "inertiaVersion", inertiaHelper.getInertiaVersion(),
+                "partialComponent", inertiaHelper.getPartialComponent(),
+                "hasSSRHead", inertiaHelper.hasSSRHead()
+            ),
+            "ssrInfo", props(
+                "ssrEnabled", "Check configuration",
+                "note", "SSR would render this page server-side if enabled and SSR server is running"
+            )
         ));
     }
 

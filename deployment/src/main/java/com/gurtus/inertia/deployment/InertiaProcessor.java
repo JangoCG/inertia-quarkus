@@ -29,6 +29,8 @@ public class InertiaProcessor {
                 .addBeanClass("com.gurtus.inertia.runtime.InertiaRenderer")
                 .addBeanClass("com.gurtus.inertia.runtime.InertiaSession")
                 .addBeanClass("com.gurtus.inertia.runtime.InertiaController")
+                .addBeanClass("com.gurtus.inertia.runtime.InertiaSSRService")
+                .addBeanClass("com.gurtus.inertia.runtime.InertiaHelper")
                 .build();
     }
 
