@@ -1,0 +1,5 @@
+# Quarkus Extension Registry Entry for Inertia.js Extension
+# File to be created: extensions/quarkus-inertia.yaml in the quarkus-extension-catalog repository
+
+group-id: io.github.cengiz-io
+artifact-id: quarkus-inertia

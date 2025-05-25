@@ -1,0 +1,5 @@
+# This file would be added to the Quarkus Extension Catalog repository
+# at: https://github.com/quarkusio/quarkus-extension-catalog/tree/main/extensions
+
+group-id: com.gurtus.inertia-quarkus
+artifact-id: inertia

@@ -1,0 +1,21 @@
+name: "Inertia.js - Modern Monolith Web Development"
+description: "Quarkus extension for Inertia.js - enables server-side routing with client-side rendering using React, Vue, or Svelte"
+metadata:
+  keywords:
+    - "inertia"
+    - "inertiajs"
+    - "spa"
+    - "frontend"
+    - "vue"
+    - "react"
+    - "svelte"
+    - "server-side-rendering"
+    - "web"
+    - "reactive"
+    - "modern-monolith"
+  guide: "https://github.com/JangoCG/inertia-quarkus"
+  categories:
+    - "web"
+    - "reactive"
+  status: "experimental"
+  unlisted: false
