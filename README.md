@@ -19,6 +19,7 @@ Inertia.js is a new approach to building classic server-driven web apps. It allo
 - ✅ **CDI Integration**
 - ✅ **Native Image Support**
 - ✅ **Hot Module Replacement** in dev mode
+- 🛡️ **Automatic CSRF Protection** - Built-in CSRF protection with Axios integration
 
 ## Installation
 
@@ -306,8 +307,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Quarkus](https://quarkus.io/) - The supersonic, subatomic Java framework
 - The Java and JavaScript communities
 
-````
-
 ### 4. Advanced Usage
 
 Install the Inertia.js client library for your frontend framework:
@@ -535,4 +534,123 @@ mvn clean package -Pnative
 ## License
 
 MIT License
-````
+
+## 🛡️ Automatic CSRF Protection
+
+The extension automatically configures CSRF protection that works seamlessly with Inertia.js and Axios:
+
+### What's Included
+
+- **Automatic Configuration**: CSRF protection is enabled by default
+- **Axios Integration**: Works automatically with Axios (no manual token handling required)
+- **Cookie-based Tokens**: Uses `XSRF-TOKEN` cookies that Axios reads automatically
+- **Header Validation**: Validates `X-XSRF-TOKEN` headers sent by Axios
+
+### How It Works
+
+1. **Server sets cookie**: Quarkus automatically sets an `XSRF-TOKEN` cookie
+2. **Axios reads cookie**: Axios automatically reads the cookie value
+3. **Axios sends header**: Axios includes `X-XSRF-TOKEN` header in POST/PUT/PATCH/DELETE requests
+4. **Server validates**: Quarkus validates that cookie and header match
+
+### Default Configuration
+
+```properties
+# These are automatically configured by the extension:
+quarkus.rest-csrf.cookie-name=XSRF-TOKEN
+quarkus.rest-csrf.cookie-http-only=false
+quarkus.rest-csrf.token-header-name=X-XSRF-TOKEN
+```
+
+### Usage in Frontend
+
+No additional configuration needed! Just use Inertia.js forms as usual:
+
+```tsx
+import { useForm } from "@inertiajs/react";
+
+function ContactForm() {
+  const { data, setData, post, processing } = useForm({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const submit = (e) => {
+    e.preventDefault();
+    // CSRF token is automatically included by Axios
+    post("/contact");
+  };
+
+  return <form onSubmit={submit}>{/* Your form fields */}</form>;
+}
+```
+
+## Advanced Features
+
+### Prop Types
+
+```java
+@GET
+public Response dashboard() {
+    return inertia("Dashboard")
+        .withOptional("stats", this::getStats)           // Only on partial reloads
+        .withAlways("user", this::getCurrentUser)        // Always included
+        .withMerge("notifications", this::getNotifications) // Client-side merge
+        .withDefer("reports", this::getReports);         // Loaded separately
+}
+```
+
+### Shared Data
+
+```java
+@ApplicationScoped
+public class GlobalConfig {
+
+    @Inject
+    InertiaService inertiaService;
+
+    void onStart(@Observes StartupEvent ev) {
+        // Global shared data
+        inertiaService.shareData("appName", "My App");
+
+        // Conditional shared data
+        inertiaService.shareDataIf(() -> isDebugMode(), "debug", true);
+
+        // Action-specific data
+        inertiaService.shareOnly(List.of("admin"), "adminData", this::getAdminData);
+    }
+}
+```
+
+### SSR Configuration
+
+```properties
+quarkus.inertia.ssr.enabled=true
+quarkus.inertia.ssr.url=http://localhost:13714
+quarkus.inertia.ssr.timeout=5000
+```
+
+## Configuration Options
+
+| Property                        | Default                  | Description                     |
+| ------------------------------- | ------------------------ | ------------------------------- |
+| `quarkus.inertia.version`       | `1.0`                    | Asset version for cache busting |
+| `quarkus.inertia.root-template` | `app.html`               | Root template file              |
+| `quarkus.inertia.ssr.enabled`   | `false`                  | Enable server-side rendering    |
+| `quarkus.inertia.ssr.url`       | `http://localhost:13714` | SSR server URL                  |
+| `quarkus.inertia.ssr.timeout`   | `5000`                   | SSR request timeout (ms)        |
+
+## Examples
+
+Check out the `integration-tests` module for complete examples including:
+
+- Basic Inertia.js setup
+- CSRF protection demo
+- Advanced prop types
+- Shared data configuration
+- SSR integration
+
+## License
+
+This project is licensed under the Apache License 2.0.
