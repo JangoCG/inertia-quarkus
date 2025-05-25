@@ -1,8 +1,13 @@
-import React from 'react'
 import { Link } from '@inertiajs/react'
 import Layout from './Layout'
 
-export default function About({ title, description, features }) {
+interface AboutProps {
+  title: string
+  description: string
+  features: string[]
+}
+
+export default function About({ title, description, features }: AboutProps) {
   return (
     <Layout title="About">
       <div className="text-center bg-white/95 p-12 rounded-3xl mb-8 shadow-2xl">

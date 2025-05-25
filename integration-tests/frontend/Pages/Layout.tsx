@@ -1,7 +1,12 @@
-import React, { useState } from 'react'
+import { useState, ReactNode } from 'react'
 import { Link, usePage } from '@inertiajs/react'
 
-export default function Layout({ title, children }) {
+interface LayoutProps {
+  title?: string
+  children: ReactNode
+}
+
+export default function Layout({ children }: LayoutProps) {
   const { url } = usePage()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 

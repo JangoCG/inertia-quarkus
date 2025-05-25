@@ -1,9 +1,23 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link } from '@inertiajs/react'
 import Layout from './Layout'
 
-export default function Users({ users, totalUsers }) {
-  const [selectedUser, setSelectedUser] = useState(null)
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+  active: boolean
+  createdAt: string
+}
+
+interface UsersProps {
+  users: User[]
+  totalUsers: number
+}
+
+export default function Users({ users, totalUsers }: UsersProps) {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   return (
     <Layout title="Users">

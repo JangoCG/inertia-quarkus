@@ -21,8 +21,8 @@ export default defineConfig(({ command }) => {
       emptyOutDir: true,
       rollupOptions: {
         input: isProduction
-          ? resolve(__dirname, "frontend/main.jsx")
-          : "./main.jsx",
+          ? resolve(__dirname, "frontend/main.tsx")
+          : "./main.tsx",
       },
     },
   };

@@ -1,8 +1,12 @@
-import React from 'react'
 import { Link } from '@inertiajs/react'
 import Layout from './Layout'
 
-export default function Home({ message, timestamp }) {
+interface HomeProps {
+  message: string
+  timestamp: string
+}
+
+export default function Home({ message, timestamp }: HomeProps) {
   return (
     <Layout title="Home">
       <div className="text-center bg-white/95 p-12 rounded-3xl mb-8 shadow-2xl">
