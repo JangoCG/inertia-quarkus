@@ -3,7 +3,7 @@
 
 ```sh
 # bump all versions
-mvn versions:set -DnewVersion=0.2.0 -DprocessAllModules=true -DgenerateBackupPoms=false
+mvn versions:set -DnewVersion=0.2.1 -DprocessAllModules=true -DgenerateBackupPoms=false
 
 # Deploy
 mvn clean deploy
