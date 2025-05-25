@@ -26,6 +26,7 @@ public class InertiaProcessor {
     AdditionalBeanBuildItem registerBeans() {
         return AdditionalBeanBuildItem.builder()
                 .addBeanClasses(InertiaService.class, InertiaFilter.class, InertiaContext.class, InertiaConfig.class)
+                .addBeanClass("com.gurtus.inertia.runtime.InertiaRenderer")
                 .build();
     }
 
@@ -33,7 +34,8 @@ public class InertiaProcessor {
     ReflectiveClassBuildItem registerForReflection() {
         return ReflectiveClassBuildItem.builder(
                 "com.gurtus.inertia.runtime.InertiaPage",
-                "com.gurtus.inertia.runtime.InertiaResponse"
+                "com.gurtus.inertia.runtime.InertiaResponse",
+                "com.gurtus.inertia.runtime.InertiaRenderer"
         ).build();
     }
 

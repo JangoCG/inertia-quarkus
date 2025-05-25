@@ -30,6 +30,31 @@ public final class InertiaHeaders {
      */
     public static final String X_INERTIA_PARTIAL_DATA = "X-Inertia-Partial-Data";
     
+    /**
+     * Header for partial data exclusion.
+     */
+    public static final String X_INERTIA_PARTIAL_EXCEPT = "X-Inertia-Partial-Except";
+    
+    /**
+     * Header for resetting specific props.
+     */
+    public static final String X_INERTIA_RESET = "X-Inertia-Reset";
+    
+    /**
+     * Standard XMLHttpRequest header.
+     */
+    public static final String X_REQUESTED_WITH = "X-Requested-With";
+    
+    /**
+     * CSRF token header.
+     */
+    public static final String X_CSRF_TOKEN = "X-CSRF-Token";
+    
+    /**
+     * XSRF token header.
+     */
+    public static final String X_XSRF_TOKEN = "X-XSRF-Token";
+    
     private InertiaHeaders() {
         // Utility class
     }

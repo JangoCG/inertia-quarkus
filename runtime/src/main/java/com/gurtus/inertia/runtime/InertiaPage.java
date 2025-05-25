@@ -1,7 +1,10 @@
 package com.gurtus.inertia.runtime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Represents an Inertia.js page object that gets serialized to JSON
@@ -22,10 +25,24 @@ public class InertiaPage {
     private String version;
     
     @JsonProperty("encryptHistory")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean encryptHistory;
     
     @JsonProperty("clearHistory")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean clearHistory;
+    
+    @JsonProperty("deferredProps")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, List<String>> deferredProps;
+    
+    @JsonProperty("mergeProps")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<String> mergeProps;
+    
+    @JsonProperty("deepMergeProps")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<String> deepMergeProps;
     
     public InertiaPage() {
     }
@@ -83,5 +100,29 @@ public class InertiaPage {
     
     public void setClearHistory(Boolean clearHistory) {
         this.clearHistory = clearHistory;
+    }
+    
+    public Map<String, List<String>> getDeferredProps() {
+        return deferredProps;
+    }
+    
+    public void setDeferredProps(Map<String, List<String>> deferredProps) {
+        this.deferredProps = deferredProps;
+    }
+    
+    public List<String> getMergeProps() {
+        return mergeProps;
+    }
+    
+    public void setMergeProps(List<String> mergeProps) {
+        this.mergeProps = mergeProps;
+    }
+    
+    public List<String> getDeepMergeProps() {
+        return deepMergeProps;
+    }
+    
+    public void setDeepMergeProps(List<String> deepMergeProps) {
+        this.deepMergeProps = deepMergeProps;
     }
 } 

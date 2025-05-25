@@ -1,11 +1,11 @@
 package com.gurtus.inertia.runtime;
 
+import java.util.Optional;
+
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
-
-import java.util.Optional;
 
 /**
  * Configuration for Inertia.js integration.
@@ -52,4 +52,22 @@ public interface InertiaConfig {
      */
     @WithDefault("30000")
     int ssrTimeout();
+    
+    /**
+     * Whether to use deep merging for shared data.
+     */
+    @WithDefault("false")
+    boolean deepMergeSharedData();
+    
+    /**
+     * Whether to encrypt the history state in the client.
+     */
+    @WithDefault("false")
+    boolean encryptHistory();
+    
+    /**
+     * Whether to clear history state.
+     */
+    @WithDefault("false")
+    boolean clearHistory();
 } 
