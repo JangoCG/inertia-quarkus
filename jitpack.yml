@@ -1,0 +1,7 @@
+jdk:
+  - openjdk17
+before_install:
+  - export JAVA_HOME=$JAVA_17_HOME
+  - java -version
+install:
+  - mvn clean install -DskipTests -q
