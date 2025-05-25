@@ -57,6 +57,16 @@ export default function Layout({ children }: LayoutProps) {
               >
                 👥 Users
               </Link>
+              <Link
+                href="/csrf-demo"
+                className={`px-4 py-2 rounded-lg transition-all duration-300 hover:-translate-y-0.5 ${
+                  url === "/csrf-demo"
+                    ? "bg-indigo-500 text-white"
+                    : "text-gray-600 hover:bg-indigo-500 hover:text-white"
+                }`}
+              >
+                🛡️ CSRF Demo
+              </Link>
             </div>
 
             {/* Mobile menu button */}
@@ -116,6 +126,17 @@ export default function Layout({ children }: LayoutProps) {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   👥 Users
+                </Link>
+                <Link
+                  href="/csrf-demo"
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                    url === "/csrf-demo"
+                      ? "bg-indigo-500 text-white"
+                      : "text-gray-600 hover:bg-indigo-500 hover:text-white"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  🛡️ CSRF Demo
                 </Link>
               </div>
             </div>

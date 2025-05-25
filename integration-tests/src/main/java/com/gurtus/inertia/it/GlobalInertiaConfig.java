@@ -48,6 +48,9 @@ public class GlobalInertiaConfig {
             }
             return data;
         });
+        
+        // CSRF tokens are automatically handled by Axios via XSRF-TOKEN cookie
+        // No need to share CSRF tokens as props - Axios reads them from cookies
     }
 
     /**
