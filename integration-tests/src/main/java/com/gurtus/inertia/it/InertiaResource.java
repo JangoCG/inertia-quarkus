@@ -26,7 +26,7 @@ public class InertiaResource {
     @Path("/")
     public Response home() {
         return inertiaService.inertia("Home")
-            .with("message", "Willkommen bei der Inertia.js Quarkus Extension mit React!")
+            .with("message", "Welcome to the Inertia.js Quarkus Extension with React!")
             .with("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")))
             .build();
     }
@@ -41,21 +41,21 @@ public class InertiaResource {
     @Path("/about")
     public Response about() {
         var features = List.of(
-            "Vollständige Inertia.js Protokoll-Unterstützung",
-            "Asset-Versionierung für Cache-Busting",
-            "Partial Reloads für optimierte Performance",
-            "Server-Side Rendering (SSR) Support",
-            "Qute Template Integration",
-            "CDI Integration",
-            "Native Image Support",
-            "React Integration mit Vite",
-            "Moderne UI-Komponenten",
-            "Responsive Design"
+            "Full Inertia.js protocol support",
+            "Asset versioning for cache busting",
+            "Partial reloads for optimized performance",
+            "Server-side rendering (SSR) support",
+            "Qute template integration",
+            "CDI integration",
+            "Native image support",
+            "React integration with Vite",
+            "Modern UI components",
+            "Responsive design"
         );
 
         return inertiaService.inertia("About")
-            .with("title", "Über die Inertia.js Quarkus Extension")
-            .with("description", "Eine moderne Extension für die Entwicklung von SPAs mit Server-Side Patterns")
+            .with("title", "About the Inertia.js Quarkus Extension")
+            .with("description", "A modern extension for developing SPAs with server-side patterns")
             .with("features", features)
             .build();
     }
@@ -63,43 +63,43 @@ public class InertiaResource {
     @GET
     @Path("/users")
     public Response users() {
-        // Erweiterte Mock-Daten für die React-Komponente
+        // Extended mock data for the React component
         var users = List.of(
             Map.of(
-                "id", 1, 
-                "name", "Max Mustermann", 
+                "id", 1,
+                "name", "Max Mustermann",
                 "email", "max.mustermann@example.com",
                 "role", "Administrator",
                 "active", true,
                 "createdAt", "15.01.2024 09:30"
             ),
             Map.of(
-                "id", 2, 
-                "name", "Anna Schmidt", 
+                "id", 2,
+                "name", "Anna Schmidt",
                 "email", "anna.schmidt@example.com",
-                "role", "Entwicklerin",
+                "role", "Developer",
                 "active", true,
                 "createdAt", "22.02.2024 14:15"
             ),
             Map.of(
-                "id", 3, 
-                "name", "Tom Weber", 
+                "id", 3,
+                "name", "Tom Weber",
                 "email", "tom.weber@example.com",
                 "role", "Designer",
                 "active", false,
                 "createdAt", "03.03.2024 11:45"
             ),
             Map.of(
-                "id", 4, 
-                "name", "Lisa Müller", 
+                "id", 4,
+                "name", "Lisa Müller",
                 "email", "lisa.mueller@example.com",
-                "role", "Projektmanagerin",
+                "role", "Project Manager",
                 "active", true,
                 "createdAt", "18.04.2024 16:20"
             ),
             Map.of(
-                "id", 5, 
-                "name", "Stefan Bauer", 
+                "id", 5,
+                "name", "Stefan Bauer",
                 "email", "stefan.bauer@example.com",
                 "role", "DevOps Engineer",
                 "active", true,
@@ -112,4 +112,4 @@ public class InertiaResource {
             .with("totalUsers", users.size())
             .build();
     }
-} 
+}
