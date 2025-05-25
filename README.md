@@ -308,24 +308,24 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ````
 
-### 3. Frontend Setup
+### 4. Advanced Usage
 
-Installiere die Inertia.js Client-Bibliothek für dein Frontend-Framework:
+Install the Inertia.js client library for your frontend framework:
 
 ```bash
-# Für Vue.js
+# For Vue.js
 npm install @inertiajs/vue3
 
-# Für React
+# For React
 npm install @inertiajs/react
 
-# Für Svelte
+# For Svelte
 npm install @inertiajs/svelte
-````
+```
 
-### 4. Shared Props
+### 5. Shared Props
 
-Du kannst Props global für alle Inertia-Responses teilen:
+You can share props globally for all Inertia responses:
 
 ```java
 @ApplicationScoped
@@ -336,27 +336,27 @@ public class InertiaSetup {
 
     @PostConstruct
     void setup() {
-        // Globale Props für alle Seiten
+        // Global props for all pages
         inertiaService.share("app", Map.of(
-            "name", "Meine App",
+            "name", "My App",
             "version", "1.0.0"
         ));
     }
 }
 ```
 
-## Beispiel-Projekt
+## Example Project
 
-Das `integration-tests` Modul enthält ein vollständiges Beispiel mit:
+The `integration-tests` module contains a complete example with:
 
-- Verschiedenen Routen
-- Shared Props
-- Template-Konfiguration
-- Frontend-Integration
+- Various routes
+- Shared props
+- Template configuration
+- Frontend integration
 
-## Vergleich mit dem Go Adapter
+## Comparison with Go Adapter
 
-Diese Extension implementiert die gleiche Funktionalität wie der [Go Inertia Adapter](https://github.com/inertiajs/inertia-go):
+This extension implements the same functionality as the [Go Inertia Adapter](https://github.com/inertiajs/inertia-go):
 
 | Feature          | Go Adapter | Quarkus Extension |
 | ---------------- | ---------- | ----------------- |
@@ -367,78 +367,78 @@ Diese Extension implementiert die gleiche Funktionalität wie der [Go Inertia Ad
 | SSR Support      | ✅         | ✅                |
 | Middleware       | ✅         | ✅ (Filter)       |
 
-## Entwicklung
+## Development Guide
 
-### Für Entwickler ohne Quarkus Extension Erfahrung
+### For Developers New to Quarkus Extensions
 
-#### 1. Extension lokal bauen und installieren
+#### 1. Build and Install Extension Locally
 
 ```bash
-# Extension komplett bauen und im lokalen Maven Repository installieren
+# Build extension completely and install in local Maven repository
 mvn clean install -DskipTests
 ```
 
-#### 2. Demo-Anwendung starten
+#### 2. Start Demo Application
 
 ```bash
-# In das Integration-Tests Verzeichnis wechseln
+# Navigate to integration tests directory
 cd integration-tests
 
-# Demo-Anwendung im Dev-Modus starten
+# Start demo application in dev mode
 mvn quarkus:dev
 ```
 
-#### 3. Im Browser testen
+#### 3. Test in Browser
 
-Öffne deinen Browser und gehe zu: **http://localhost:8080**
+Open your browser and go to: **http://localhost:8080**
 
-**🎉 Du solltest jetzt eine schöne Demo-Seite sehen mit:**
+**🎉 You should now see a beautiful demo page with:**
 
-- ✅ Erfolgsmeldung der Extension
-- 📊 Aktuelle Page-Daten (Component, URL, Version)
-- 🔗 Klickbare Test-Links zu allen Routes
-- 🧪 Interaktiver "Test XHR Request" Button
-- 📋 JSON-Darstellung der Inertia Page-Daten
+- ✅ Extension success message
+- 📊 Current page data (Component, URL, Version)
+- 🔗 Clickable test links to all routes
+- 🧪 Interactive "Test XHR Request" button
+- 📋 JSON representation of Inertia page data
 
-**Wichtige URLs zum Testen:**
+**Important URLs for Testing:**
 
-- **Test-Route**: http://localhost:8080/test
-  - Zeigt: "Inertia Extension is loaded!"
-- **Inertia HTML-Responses** (normale Browser-Requests):
+- **Test Route**: http://localhost:8080/test
+  - Shows: "Inertia Extension is loaded!"
+- **Inertia HTML Responses** (normal browser requests):
   - http://localhost:8080/ (Home)
   - http://localhost:8080/about (About)
   - http://localhost:8080/users (Users)
-- **Inertia JSON-Responses** (für XHR/AJAX):
+- **Inertia JSON Responses** (for XHR/AJAX):
 
   ```bash
-  # Home-Route als JSON
+  # Home route as JSON
   curl -H "X-Inertia: true" http://localhost:8080/
 
-  # About-Route als JSON
+  # About route as JSON
   curl -H "X-Inertia: true" http://localhost:8080/about
 
-  # Users-Route als JSON
+  # Users route as JSON
   curl -H "X-Inertia: true" http://localhost:8080/users
   ```
 
-**🔥 Interaktiver Test im Browser:**
-Klicke auf den "Test XHR Request" Button auf der Demo-Seite, um zu sehen, wie Inertia.js XHR-Requests funktionieren!
+**🔥 Interactive Test in Browser:**
+Click the "Test XHR Request" button on the demo page to see how Inertia.js XHR requests work!
 
-#### 4. Template-Problem beheben
+#### 4. Fix Template Issues
 
-Falls du "Error rendering template: null" siehst, liegt das daran, dass das Qute-Template nicht gefunden wird.
+If you see "Error rendering template: null", this is because the Qute template is not found.
 
-**Lösung**: Das Template `inertia.html` muss im richtigen Verzeichnis liegen:
+**Solution**: The template `inertia.html` must be in the correct directory:
 
 ```
 integration-tests/src/main/resources/templates/inertia.html
 ```
 
-#### 5. Vollständige Demo mit Frontend
+#### 5. Complete Demo with Frontend
 
-Um eine echte Inertia.js Anwendung zu erstellen:
+To create a real Inertia.js application:
 
-1. **Frontend Setup** (Vue.js Beispiel):
+1. **Frontend Setup** (Vue.js Example):
 
 ```bash
 cd integration-tests
@@ -447,7 +447,7 @@ npm install @inertiajs/vue3 vue@next
 npm install -D vite @vitejs/plugin-vue
 ```
 
-2. **Vite Konfiguration** (`vite.config.js`):
+2. **Vite Configuration** (`vite.config.js`):
 
 ```javascript
 import { defineConfig } from "vite";
@@ -485,41 +485,41 @@ createInertiaApp({
 
 #### 6. Debugging
 
-**Quarkus Dev-Modus Features:**
+**Quarkus Dev Mode Features:**
 
-- **Live Reload**: Änderungen werden automatisch übernommen
+- **Live Reload**: Changes are automatically applied
 - **Dev UI**: http://localhost:8080/q/dev-ui
 - **Health Check**: http://localhost:8080/q/health
 
-**Logs anschauen:**
+**View Logs:**
 
 ```bash
-# Extension-Features anzeigen
+# Show extension features
 curl http://localhost:8080/q/info
 
-# CDI Beans anzeigen
+# Show CDI beans
 curl http://localhost:8080/q/arc/beans | grep -i inertia
 ```
 
-#### 7. Häufige Probleme
+#### 7. Common Issues
 
 **Problem**: "Error rendering template: null"
-**Lösung**: Template-Datei fehlt oder ist im falschen Verzeichnis
+**Solution**: Template file is missing or in wrong directory
 
 **Problem**: "404 - Resource Not Found"  
-**Lösung**: Quarkus Dev-Modus neu starten:
+**Solution**: Restart Quarkus dev mode:
 
 ```bash
-# Alle Quarkus-Prozesse stoppen
+# Stop all Quarkus processes
 pkill -f quarkus
 
-# Neu starten
+# Restart
 cd integration-tests
 mvn clean compile quarkus:dev
 ```
 
-**Problem**: InertiaService kann nicht injiziert werden
-**Lösung**: Extension neu installieren:
+**Problem**: InertiaService cannot be injected
+**Solution**: Reinstall extension:
 
 ```bash
 cd ..
@@ -528,23 +528,23 @@ cd integration-tests
 mvn clean compile quarkus:dev
 ```
 
-### Erweiterte Entwicklung
+### Advanced Development
 
 ```bash
-# Extension bauen
+# Build extension
 mvn clean install
 
-# Tests ausführen
+# Run tests
 mvn test
 
-# Integration-Tests starten
+# Start integration tests
 cd integration-tests
 mvn quarkus:dev
 
-# Native Image bauen (optional)
+# Build native image (optional)
 mvn clean package -Pnative
 ```
 
-## Lizenz
+## License
 
 MIT License
