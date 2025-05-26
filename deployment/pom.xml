@@ -46,6 +46,10 @@
             <artifactId>quarkus-jsonp-deployment</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-jackson-deployment</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.gurtus</groupId>
             <artifactId>inertia-quarkus</artifactId>
             <version>${project.version}</version>
