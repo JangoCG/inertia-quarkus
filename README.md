@@ -93,17 +93,16 @@ Create a Qute template at `src/main/resources/templates/inertia.html`:
 
 ### 2. Create a Controller
 
+Extend the `InertiaController` base class to access the fluent API methods:
+
 ```java
 @Path("/")
-public class HomeController {
-
-    @Inject
-    InertiaService inertiaService;
+public class HomeController extends InertiaController {
 
     @GET
     @Path("/")
-    public void home(@Context RoutingContext context) {
-        inertiaService.render(context, "Home", Map.of(
+    public Response home() {
+        return inertia("Home", props(
             "message", "Welcome to Inertia.js with Quarkus!",
             "user", getCurrentUser()
         ));
@@ -111,14 +110,36 @@ public class HomeController {
 
     @GET
     @Path("/about")
-    public void about(@Context RoutingContext context) {
-        inertiaService.render(context, "About", Map.of(
+    public Response about() {
+        return inertia("About", props(
             "title", "About Us",
             "description", "A modern web app with Inertia.js"
         ));
     }
+
+    @GET
+    @Path("/users")
+    public Response users() {
+        // Using fluent API with single prop
+        return inertia("Users", "users", userService.findAll());
+    }
 }
 ```
+
+#### Available Methods
+
+The `InertiaController` provides several convenient methods:
+
+- `inertia(component)` - Render a component without props
+- `inertia(component, props)` - Render a component with a props map
+- `inertia(component, key, value)` - Render a component with a single prop (returns builder)
+- `props(key, value)` - Create a single key-value props map
+- `props(key1, value1, key2, value2, ...)` - Create multi-key props map
+- `share(key, value)` - Share data globally
+- `shareOnly(data, actions...)` - Share data only for specific actions
+- `shareExcept(data, actions...)` - Share data except for specific actions
+- `redirectWithErrors(location, errors)` - Redirect with validation errors
+- `redirectWithClearHistory(location)` - Redirect and clear browser history
 
 ### 3. Frontend Setup
 
@@ -204,14 +225,23 @@ export default {
 @POST
 @Path("/users")
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-public void createUser(@BeanParam UserForm form, @Context RoutingContext context) {
-    try {
-        userService.create(form);
-        inertiaService.redirect(context, "/users");
-    } catch (ValidationException e) {
-        inertiaService.redirect(context, "/users/create")
-            .withErrors(e.getErrors())
-            .withInput(form);
+public class UserController extends InertiaController {
+
+    @POST
+    @Path("/users")
+    public Response createUser(@BeanParam UserForm form) {
+        try {
+            userService.create(form);
+            return redirectWithClearHistory("/users");
+        } catch (ValidationException e) {
+            return redirectWithErrors("/users/create", e.getErrors());
+        }
+    }
+
+    @GET
+    @Path("/users/create")
+    public Response create() {
+        return inertia("Users/Create");
     }
 }
 ```
@@ -220,15 +250,30 @@ public void createUser(@BeanParam UserForm form, @Context RoutingContext context
 
 ```java
 @ApplicationScoped
-public class InertiaShareProvider {
+public class GlobalDataController extends InertiaController {
 
-    @InertiaShare
-    public Map<String, Object> shareAuth(@Context SecurityContext securityContext) {
-        return Map.of(
-            "auth", Map.of(
-                "user", getCurrentUser(securityContext)
-            )
-        );
+    @PostConstruct
+    void setupSharedData() {
+        // Global shared data for all requests
+        share("app", props(
+            "name", "My App",
+            "version", "1.0.0"
+        ));
+
+        // Share data only for specific actions
+        shareOnly(props("isAdmin", true), "admin.index", "admin.users");
+
+        // Share data except for specific actions
+        shareExcept(props("debugMode", true), "public.login", "public.register");
+
+        // Conditional shared data
+        shareDataIf(props("maintenanceMode", true), () -> isMaintenanceMode());
+
+        // Dynamic shared data
+        shareData(() -> props(
+            "timestamp", System.currentTimeMillis(),
+            "randomId", UUID.randomUUID().toString()
+        ));
     }
 }
 ```
@@ -328,15 +373,12 @@ You can share props globally for all Inertia responses:
 
 ```java
 @ApplicationScoped
-public class InertiaSetup {
-
-    @Inject
-    InertiaService inertiaService;
+public class InertiaSetup extends InertiaController {
 
     @PostConstruct
     void setup() {
-        // Global props for all pages
-        inertiaService.share("app", Map.of(
+        // Global props for all pages using the fluent API
+        share("app", props(
             "name", "My App",
             "version", "1.0.0"
         ));
@@ -591,13 +633,31 @@ function ContactForm() {
 ### Prop Types
 
 ```java
-@GET
-public Response dashboard() {
-    return inertia("Dashboard")
-        .withOptional("stats", this::getStats)           // Only on partial reloads
-        .withAlways("user", this::getCurrentUser)        // Always included
-        .withMerge("notifications", this::getNotifications) // Client-side merge
-        .withDefer("reports", this::getReports);         // Loaded separately
+public class DashboardController extends InertiaController {
+
+    @GET
+    public Response dashboard() {
+        // Simple component render
+        return inertia("Dashboard");
+    }
+
+    @GET
+    @Path("/with-props")
+    public Response dashboardWithProps() {
+        // Using props helper for multiple properties
+        return inertia("Dashboard", props(
+            "stats", getStats(),
+            "user", getCurrentUser(),
+            "notifications", getNotifications()
+        ));
+    }
+
+    @GET
+    @Path("/single-prop")
+    public Response dashboardSingleProp() {
+        // Using fluent API for single property
+        return inertia("Dashboard", "user", getCurrentUser());
+    }
 }
 ```
 
@@ -605,20 +665,19 @@ public Response dashboard() {
 
 ```java
 @ApplicationScoped
-public class GlobalConfig {
-
-    @Inject
-    InertiaService inertiaService;
+public class GlobalConfig extends InertiaController {
 
     void onStart(@Observes StartupEvent ev) {
-        // Global shared data
-        inertiaService.shareData("appName", "My App");
+        // Global shared data using the fluent API
+        share("appName", "My App");
+        share("version", "1.0.0");
 
         // Conditional shared data
-        inertiaService.shareDataIf(() -> isDebugMode(), "debug", true);
+        shareDataIf(props("debug", true), () -> isDebugMode());
 
         // Action-specific data
-        inertiaService.shareOnly(List.of("admin"), "adminData", this::getAdminData);
+        shareOnly(props("adminData", getAdminData()), "admin.index", "admin.users");
+        shareExcept(props("publicData", getPublicData()), "admin.index");
     }
 }
 ```
